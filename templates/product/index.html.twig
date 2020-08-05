@@ -1,25 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product index{% endblock %}
+{% block title %}Liste de cadeaux{% endblock %}
 
 {% block body %}
-    <h1>Product index</h1>
+        <h1>Liste de cadeaux</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Description</th>
-                <th>Picture</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
         {% for product in products %}
             <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="..." alt="Card image cap">
+                <img class="card-img-top" src="{{ product.picture }}" alt="{{ product.name }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text">{{ product.description }}</p>
@@ -27,24 +15,11 @@
                     <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-primary">edit</a>
                 </div>
             </div>
-            <tr>
-                <td>{{ product.id }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.price }}</td>
-                <td>{{ product.description }}</td>
-                <td>{{ product.picture }}</td>
-                <td>
-                    <a href="{{ path('product_show', {'id': product.id}) }}">show</a>
-                    <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
-                </td>
-            </tr>
         {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
+            <div class="card" style="width: 18rem;">
+                <p>no records found</p>
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
 
     <a href="{{ path('product_new') }}">Create new</a>
 {% endblock %}
