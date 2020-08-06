@@ -1,25 +1,71 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste de cadeaux{% endblock %}
+{% block title %}Product index{% endblock %}
 
 {% block body %}
-        <h1>Liste de cadeaux</h1>
-
+    <h1>Liste de cadeaux</h1>
+    <div class="row">
         {% for product in products %}
-            <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="{{ product.picture }}" alt="{{ product.name }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">{{ product.description }}</p>
-                    <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary">show</a>
-                    <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-primary">edit</a>
+            <div class="col-sm-3">
+                <div class="card">
+                    <img class="card-img-top" src="{{ asset('images/products/'~ product.image.name) }}" alt="{{ product.image.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description }}</p>
+                        <p class="card-text">{{ product.price }} €</p>
+                        <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-danger">Sélectionner</a>
+                        <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-primary">edit</a>
+                    </div>
                 </div>
             </div>
         {% else %}
-            <div class="card" style="width: 18rem;">
-                <p>no records found</p>
+            <div class="card">
+                <p class="card-text">no records found</p>
             </div>
         {% endfor %}
+    </div>
+
+    <h1>Product index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Image.name</th>
+                <th>Image.originalName</th>
+                <th>Image.mimeType</th>
+                <th>Image.size</th>
+                <th>Image.dimensions</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.image.name }}</td>
+                <td>{{ product.image.originalName }}</td>
+                <td>{{ product.image.mimeType }}</td>
+                <td>{{ product.image.size }}</td>
+                <td>{{ dump(product.image.dimensions) }}</td>
+                <td>
+                    <a href="{{ path('product_show', {'id': product.id}) }}">show</a>
+                    <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
     <a href="{{ path('product_new') }}">Create new</a>
 {% endblock %}

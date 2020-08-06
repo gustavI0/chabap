@@ -24,8 +24,24 @@
                 <td>{{ product.description }}</td>
             </tr>
             <tr>
-                <th>Picture</th>
-                <td>{{ product.picture }}</td>
+                <th>Image.name</th>
+                <td>{{ product.image.name }}</td>
+            </tr>
+            <tr>
+                <th>Image.originalName</th>
+                <td>{{ product.image.originalName }}</td>
+            </tr>
+            <tr>
+                <th>Image.mimeType</th>
+                <td>{{ product.image.mimeType }}</td>
+            </tr>
+            <tr>
+                <th>Image.size</th>
+                <td>{{ product.image.size }}</td>
+            </tr>
+            <tr>
+                <th>Image.dimensions</th>
+                <td>{{ dump(product.image.dimensions) }}</td>
             </tr>
         </tbody>
     </table>
