@@ -13,7 +13,7 @@ use Vich\UploaderBundle\Entity\File as EmbeddedFile;
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  * @Vich\Uploadable
  */
-class Product
+class Product implements ProductInterface
 {
     /**
      * @ORM\Id()
@@ -60,13 +60,18 @@ class Product
      */
     protected $updatedAt;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $currentContribution;
+
 
     public function __construct()
     {
         $this->image = new EmbeddedFile();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -140,5 +145,17 @@ class Product
     public function getImage(): ?EmbeddedFile
     {
         return $this->image;
+    }
+
+    public function getCurrentContribution(): ?int
+    {
+        return $this->currentContribution;
+    }
+
+    public function setCurrentContribution(?int $currentContribution): self
+    {
+        $this->currentContribution = $currentContribution;
+
+        return $this;
     }
 }

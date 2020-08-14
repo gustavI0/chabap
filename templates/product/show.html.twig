@@ -43,8 +43,14 @@
                 <th>Image.dimensions</th>
                 <td>{{ dump(product.image.dimensions) }}</td>
             </tr>
+            <tr>
+                <th>Current contribution</th>
+                <td>{{ product.currentContribution }}</td>
+            </tr>
         </tbody>
     </table>
+
+    {{ include('payment/_form.html.twig') }}
 
     <a href="{{ path('product_index') }}">back to list</a>
 

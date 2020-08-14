@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Payment index{% endblock %}
+
+{% block body %}
+    <h1>Payment index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Amount</th>
+                <th>Success</th>
+                <th>Date</th>
+                <th>Email</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for payment in payments %}
+            <tr>
+                <td>{{ payment.id }}</td>
+                <td>{{ payment.amount }}</td>
+                <td>{{ payment.success ? 'Yes' : 'No' }}</td>
+                <td>{{ payment.date ? payment.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ payment.email }}</td>
+                <td>
+                    <a href="{{ path('payment_show', {'id': payment.id}) }}">show</a>
+                    <a href="{{ path('payment_edit', {'id': payment.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <form id="payment-form">
+        <label for="prix">Prix</label>
+        <input type="text" name="prix" id="prix">
+        <div id="card-element"><!--Stripe.js injects the Card Element--></div>
+        <button id="submit">
+            <div class="spinner hidden" id="spinner"></div>
+            <span id="button-text">Pay</span>
+        </button>
+        <p id="card-error" role="alert"></p>
+        <p class="result-message hidden">
+            Payment succeeded, see the result in your
+            <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
+        </p>
+    </form>
+
+    <a href="{{ path('payment_new') }}">Create new</a>
+{% endblock %}
