@@ -71,7 +71,7 @@ class Product implements ProductInterface
         $this->image = new EmbeddedFile();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

@@ -18,13 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class PaymentController extends AbstractController
 {
 
-    protected $paymentManager;
-
-    public function __construct(PaymentManager $paymentManager)
-    {
-        $this->paymentManager = $paymentManager;
-    }
-
     /**
      * @Route("/", name="payment_index", methods={"GET"})
      * @param PaymentRepository $paymentRepository
@@ -35,16 +28,6 @@ class PaymentController extends AbstractController
         return $this->render('payment/index.html.twig', [
             'payments' => $paymentRepository->findAll(),
         ]);
-    }
-
-    /**
-     * @Route("/contribute", name="payment_contribute", methods={"POST"})
-     * @param Request $request
-     * @return Response
-     */
-    public function contribute(Request $request): Response
-    {
-        return $this->paymentManager->createPayment($request);
     }
 
     /**
@@ -88,10 +71,10 @@ class PaymentController extends AbstractController
     /**
      * @Route("/{id}/edit", name="payment_edit", methods={"GET","POST"})
      * @param Request $request
-     * @param Payment $payment
+     * @param PaymentInterface $payment
      * @return Response
      */
-    public function edit(Request $request, Payment $payment): Response
+    public function edit(Request $request, PaymentInterface $payment): Response
     {
         $form = $this->createForm(PaymentType::class, $payment);
         $form->handleRequest($request);

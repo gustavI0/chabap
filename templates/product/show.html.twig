@@ -50,11 +50,14 @@
         </tbody>
     </table>
 
-    {{ include('payment/_form.html.twig') }}
+    {{ form_start(paymentForm, {'action': path('product_contribute', {'id': product.id}), 'method': 'POST'}) }}
+        {{ form_widget(paymentForm) }}
+        <button class="btn btn-primary">{{ button_label|default('Contribuer') }}</button>
+    {{ form_end(paymentForm) }}
 
-    <a href="{{ path('product_index') }}">back to list</a>
+    <a href="{{ path('product_index') }}" class="btn btn-primary">Retour à la liste</a>
 
-    <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
+    <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-primary">Editer</a>
 
     {{ include('product/_delete_form.html.twig') }}
 {% endblock %}
