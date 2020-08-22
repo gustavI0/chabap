@@ -4,6 +4,7 @@
 namespace App\Entity;
 
 
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Entity\File as EmbeddedFile;
 
@@ -35,17 +36,17 @@ interface ProductInterface
     public function getDescription(): ?string;
 
     /**
-     * @return File|null
-     */
-    public function getImageFile(): ?File;
-
-    /**
-     * @return EmbeddedFile|null
-     */
-    public function getImage(): ?EmbeddedFile;
-
-    /**
      * @return int|null
      */
     public function getCurrentContribution(): ?int;
+
+    /**
+     * @return Collection|null
+     */
+    public function getPayments(): ?Collection;
+
+    /**
+     * @return Collection|null
+     */
+    public function getImages(): ?Collection;
 }

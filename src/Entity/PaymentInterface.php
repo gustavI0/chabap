@@ -22,11 +22,6 @@ interface PaymentInterface
     public function getAmount(): ?int;
 
     /**
-     * @return bool|null
-     */
-    public function getSuccess(): ?bool;
-
-    /**
      * @return \DateTimeInterface|null
      */
     public function getDate(): ?\DateTimeInterface;
@@ -35,5 +30,10 @@ interface PaymentInterface
      * @return string|null
      */
     public function getEmail(): ?string;
+
+    /**
+     * @return int
+     */
+    public function getLeftToContribute(): int;
 
 }

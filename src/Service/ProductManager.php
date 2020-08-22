@@ -14,7 +14,7 @@ class ProductManager
         $price = $product->getPrice();
         $currentContribution = $product->getCurrentContribution();
 
-        return (($currentContribution - $price) / $price) * 100;
+        return 100 - ((($price - $currentContribution) / $price) * 100);
     }
 
 }

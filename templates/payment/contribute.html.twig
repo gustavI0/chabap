@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Payment{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <p>Contribution de {{ payment.amount }} €</p>
+    </div>
+    <div class="row">
+        <form id="payment-form" method="post">
+            <div id="card-element" class="form-group"><!--Stripe.js injects the Card Element--></div>
+            <button id="card-button" data-secret="{{ paymentIntent.clientSecret }}" class="btn btn-primary">
+                <div class="spinner hidden" id="spinner"></div>
+                <span id="button-text">Payer</span>
+            </button>
+            <p id="card-error" role="alert"></p>
+            <p class="result-message hidden">
+                Paiement confirmé ! <a href="{{ path('product_index') }}">Redirection vers la liste des objets</a>
+            </p>
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('payment') }}
+{% endblock %}

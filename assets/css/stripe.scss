@@ -4,18 +4,7 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  height: 100vh;
-  width: 100vw;
-}
-
-form {
+#payment-form {
   width: 30vw;
   min-width: 500px;
   align-self: center;
@@ -73,7 +62,7 @@ input {
 }
 
 /* Buttons and links */
-button {
+#card-button {
   background: #5469d4;
   color: #ffffff;
   font-family: Arial, sans-serif;
@@ -89,11 +78,11 @@ button {
   width: 100%;
 }
 
-button:hover {
+#card-button:hover {
   filter: contrast(115%);
 }
 
-button:disabled {
+#card-button:disabled {
   opacity: 0.5;
   cursor: default;
 }
@@ -175,7 +164,7 @@ button:disabled {
 }
 
 @media only screen and (max-width: 600px) {
-  form {
+  #payment-form {
     width: 80vw;
   }
 }

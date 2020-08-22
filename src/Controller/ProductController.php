@@ -9,14 +9,17 @@ use App\Form\PaymentType;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Service\PaymentManager;
+use App\Service\ProductManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 
 /**
  * @Route("/liste")
@@ -27,14 +30,20 @@ class ProductController extends AbstractController
     /**
      * @var PaymentManager
      */
+    protected $productManager;
+
+    /**
+     * @var PaymentManager
+     */
     protected $paymentManager;
 
     /**
      * ProductController constructor.
      * @param PaymentManager $paymentManager
      */
-    public function __construct(PaymentManager $paymentManager)
+    public function __construct(ProductManager $productManager, PaymentManager $paymentManager)
     {
+        $this->productManager = $productManager;
         $this->paymentManager = $paymentManager;
     }
 
@@ -50,9 +59,10 @@ class ProductController extends AbstractController
         ]);
     }
 
+
+
     /**
      * @Route("/new", name="product_new", methods={"GET","POST"})
-     * @IsGranted("ROLE_ADMIN")
      * @param Request $request
      * @return Response
      */
@@ -63,6 +73,12 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $productImages = $product->getImages();
+            foreach($productImages as $key => $productImage){
+                $productImage->setProduct($product);
+                $productImages->set($key, $productImage);
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
             $entityManager->flush();
@@ -79,34 +95,10 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}", name="product_show", methods={"GET"})
      * @param int $id
-     * @param Request $request
      * @return Response
      */
-    public function show(int $id, Request $request): Response
+    public function show(int $id): Response
     {
-        $payment = new Payment();
-        $payment->setDate(new \DateTime('now'));
-        $form = $this->createForm(PaymentType::class, $payment, [
-            'action' => $this->generateUrl('product_contribute', array('id' => $id))
-        ]);
-
-//        $form = $this->createFormBuilder($payment)
-//            ->add('email', TextType::class)
-//            ->add('amount', TextType::class)
-//            ->add('date', DateType::class)
-//            ->add('save', SubmitType::class, ['label' => 'Contribuer'])
-//            ->setAction($this->generateUrl('product_contribute', array('id' => $id)))
-//            ->getForm();
-//
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $data = $form->getData();
-//            dd($data);
-//            return $this->paymentManager->createPayment($payment);
-//            //return $this->redirectToRoute('product_contribute');
-//        }
-
         $product = $this->getDoctrine()
             ->getRepository(Product::class)
             ->find($id);
@@ -117,24 +109,66 @@ class ProductController extends AbstractController
             );
         }
 
+        $payment = new Payment();
+        $payment->setProduct($product);
+
+        $paymentData = ['left_contribution' => $payment->getLeftToContribute()];
+        $form = $this->createFormBuilder($paymentData)
+            ->add('email', TextType::class)
+            ->add('amount', IntegerType::class, [
+                'constraints' => [
+                    new LessThanOrEqual([
+                        'value' => 100,
+                        'message' => 'Vous ne pouvez pas contribuer plus que le prix total, mais vous pouvez donner à la cagnotte pour le voyage !'
+                    ])
+                ]
+            ])
+            ->add('left_contribution', HiddenType::class)
+            ->setAction($this->generateUrl('product_contribute', array('id' => $id)))
+            ->getForm();
+
+        $percentage = $this->productManager->calculatePercentage($product);
+
         return $this->render('product/show.html.twig', [
             'product' => $product,
+            'percentage' => $percentage,
+            'payment' => $payment,
             'paymentForm' => $form->createView(),
         ]);
     }
 
     /**
      * @Route("/{id}/contribute", name="product_contribute", methods={"GET", "POST"})
+     * @param int $id
      * @param Request $request
      * @return Response
      */
-    public function contribute(Request $request): Response
+    public function contribute(int $id, Request $request): Response
     {
-        return $this->paymentManager->createPayment($request->request->get('payment'));
+        $contribution = $request->request->get('form');
+
+        if ($contribution['amount'] > $contribution['left_contribution']) {
+            $this->addFlash(
+                'warning',
+                'Le montant de votre contribution est supérieur au prix total. Pensez à la cagnotte du voyage !'
+            );
+            return $this->redirectToRoute('product_show', array('id' => $id));
+        }
+
+        $contribution['product_id'] = $id;
+
+        $paymentIntent =  $this->paymentManager->createPaymentIntentStripe($contribution);
+        return $this->render('payment/contribute.html.twig', [
+            'paymentIntent' => json_decode($paymentIntent),
+            'payment' => $contribution
+        ]);
     }
+
+
 
     /**
      * @Route("/{id}/edit", name="product_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      * @param Request $request
      * @param Product $product
      * @return Response
@@ -145,6 +179,11 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $productImages = $product->getImages();
+            foreach($productImages as $key => $productImage){
+                $productImage->setProduct($product);
+                $productImages->set($key, $productImage);
+            }
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('product_index');

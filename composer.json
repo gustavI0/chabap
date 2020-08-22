@@ -29,7 +29,8 @@
         "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "5.1.*",
         "twbs/bootstrap": "4.5.0",
-        "vich/uploader-bundle": "^1.15"
+        "vich/uploader-bundle": "^1.15",
+      "ext-json": "*"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",

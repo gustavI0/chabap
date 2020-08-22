@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PaymentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PaymentRepository::class)
@@ -15,27 +16,31 @@ class Payment implements PaymentInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Positive()
+     * @Assert\LessThanOrEqual(propertyPath="leftToContribute")
      */
-    private $amount;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $success;
+    protected $amount;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $date;
+    protected $date;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $email;
+    protected $email;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="payments")
+     */
+    protected $product;
+
+    protected $leftToContribute;
 
     public function getId(): ?int
     {
@@ -50,18 +55,6 @@ class Payment implements PaymentInterface
     public function setAmount(int $amount): self
     {
         $this->amount = $amount;
-
-        return $this;
-    }
-
-    public function getSuccess(): ?bool
-    {
-        return $this->success;
-    }
-
-    public function setSuccess(bool $success): self
-    {
-        $this->success = $success;
 
         return $this;
     }
@@ -88,5 +81,25 @@ class Payment implements PaymentInterface
         $this->email = $email;
 
         return $this;
+    }
+
+    public function getProduct(): ?ProductInterface
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?ProductInterface $product): self
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLeftToContribute(): int
+    {
+        return $this->getProduct()->getPrice() - $this->getProduct()->getCurrentContribution();
     }
 }

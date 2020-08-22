@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product{% endblock %}
+{% block title %}{{ product.name }}{% endblock %}
 
 {% block body %}
-    <h1>Product</h1>
+    <h1>{{ product.name }}</h1>
 
     <table class="table">
         <tbody>
@@ -17,47 +17,66 @@
             </tr>
             <tr>
                 <th>Price</th>
-                <td>{{ product.price }}</td>
+                <td>{{ product.price }} €</td>
             </tr>
             <tr>
                 <th>Description</th>
                 <td>{{ product.description }}</td>
             </tr>
+            {% for image in product.images %}
             <tr>
                 <th>Image.name</th>
-                <td>{{ product.image.name }}</td>
+                <td>{{ image.image.name }}</td>
             </tr>
             <tr>
                 <th>Image.originalName</th>
-                <td>{{ product.image.originalName }}</td>
+                <td>{{ image.image.originalName }}</td>
             </tr>
             <tr>
                 <th>Image.mimeType</th>
-                <td>{{ product.image.mimeType }}</td>
+                <td>{{ image.image.mimeType }}</td>
             </tr>
             <tr>
                 <th>Image.size</th>
-                <td>{{ product.image.size }}</td>
+                <td>{{ image.image.size }}</td>
             </tr>
             <tr>
                 <th>Image.dimensions</th>
-                <td>{{ dump(product.image.dimensions) }}</td>
+                <td>{{ dump(image.image.dimensions) }}</td>
             </tr>
+            {% endfor %}
             <tr>
                 <th>Current contribution</th>
-                <td>{{ product.currentContribution }}</td>
+                <td>{{ product.currentContribution }} €</td>
+            </tr>
+            <tr>
+                <th>Current percentage</th>
+                <td>{{ percentage }} %</td>
+            </tr>
+            <tr>
+                <th>Left</th>
+                <td>{{ payment.leftToContribute }} €</td>
             </tr>
         </tbody>
     </table>
 
-    {{ form_start(paymentForm, {'action': path('product_contribute', {'id': product.id}), 'method': 'POST'}) }}
+    {% if percentage < 100 %}
+    {{ form_start(paymentForm) }}
         {{ form_widget(paymentForm) }}
         <button class="btn btn-primary">{{ button_label|default('Contribuer') }}</button>
     {{ form_end(paymentForm) }}
+    {% endif %}
 
     <a href="{{ path('product_index') }}" class="btn btn-primary">Retour à la liste</a>
-
+    {% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-primary">Editer</a>
 
     {{ include('product/_delete_form.html.twig') }}
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        let field = document.getElementById('payment_amount')
+    </script>
 {% endblock %}
