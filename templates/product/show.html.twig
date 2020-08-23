@@ -3,10 +3,70 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block body %}
-    <h1>{{ product.name }}</h1>
+    <div class="row page-title">
+        <h1>{{ product.name }}</h1>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="poster">
+                    {% set poster = product.images|first %}
+                    <img id="product_poster" class="img-fluid" src="{{ asset('images/products/'~ poster.image.name) }}" alt="{{ poster.image.name }}">
+                </div>
+                <div class="row">
+                    {% for thumbnail in product.images %}
+                        <div class="col-sm-3 thumbnails">
+                            <img class="product_thumbnail img-fluid" src="{{ asset('images/products/'~ thumbnail.image.name) }}" alt="{{ thumbnail.image.name }}">
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col w-50 description-item">
+                        <h3>DESCRIPTION</h3>
+                        <p>{{ product.description }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col w-50 description-item">
+                        <h3>PRIX</h3>
+                        <p>{{ product.price }} €</p>
+                    </div>
+                </div>
+                {% if percentage > 0 %}
+                <div class="row">
+                    <div class="col w-50 description-item">
+                        <h3>PARTICIPATION</h3>
+                        <p>{{ percentage }} %</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row contrib-form">
+            {% if percentage < 100 %}
+                {{ form_start(paymentForm) }}
+                {{ form_widget(paymentForm, {'attr': {'class': 'form-inline'}}) }}
+                {{ form_end(paymentForm) }}
+            {% else %}
+                <p>Cet objet a été intégralement financé ! Merci !</p>
+            {% endif %}
+        </div>
+    </div>
 
-    <table class="table">
-        <tbody>
+    <div class="row back-to-list">
+        <a href="{{ path('product_index') }}" class="btn btn-light">Retour à la liste</a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-primary">Editer</a>
+
+            {{ include('product/_delete_form.html.twig') }}
+        {% endif %}
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+    <div class="row">
+        <table class="table">
+            <tbody>
             <tr>
                 <th>Id</th>
                 <td>{{ product.id }}</td>
@@ -24,26 +84,18 @@
                 <td>{{ product.description }}</td>
             </tr>
             {% for image in product.images %}
-            <tr>
-                <th>Image.name</th>
-                <td>{{ image.image.name }}</td>
-            </tr>
-            <tr>
-                <th>Image.originalName</th>
-                <td>{{ image.image.originalName }}</td>
-            </tr>
-            <tr>
-                <th>Image.mimeType</th>
-                <td>{{ image.image.mimeType }}</td>
-            </tr>
-            <tr>
-                <th>Image.size</th>
-                <td>{{ image.image.size }}</td>
-            </tr>
-            <tr>
-                <th>Image.dimensions</th>
-                <td>{{ dump(image.image.dimensions) }}</td>
-            </tr>
+                <tr>
+                    <th>Image.name</th>
+                    <td>{{ image.image.name }}</td>
+                </tr>
+                <tr>
+                    <th>Image.size</th>
+                    <td>{{ image.image.size }}</td>
+                </tr>
+                <tr>
+                    <th>Image.dimensions</th>
+                    <td>{{ dump(image.image.dimensions) }}</td>
+                </tr>
             {% endfor %}
             <tr>
                 <th>Current contribution</th>
@@ -57,26 +109,28 @@
                 <th>Left</th>
                 <td>{{ payment.leftToContribute }} €</td>
             </tr>
-        </tbody>
-    </table>
-
-    {% if percentage < 100 %}
-    {{ form_start(paymentForm) }}
-        {{ form_widget(paymentForm) }}
-        <button class="btn btn-primary">{{ button_label|default('Contribuer') }}</button>
-    {{ form_end(paymentForm) }}
+            </tbody>
+        </table>
+    </div>
     {% endif %}
 
-    <a href="{{ path('product_index') }}" class="btn btn-primary">Retour à la liste</a>
-    {% if is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-primary">Editer</a>
-
-    {{ include('product/_delete_form.html.twig') }}
-    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
     <script>
-        let field = document.getElementById('payment_amount')
+        window.onload = () => {
+            // Validate contribution
+            let amountField = document.getElementById('payment_amount')
+            let leftContribution = {{ payment.leftToContribute }}
+
+            // Picture gallery
+            const mainPicture = document.getElementById('product_poster');
+            let thumbnails = document.getElementsByClassName('product_thumbnail')
+            Array.prototype.forEach.call(thumbnails, function(thumbnail) {
+                thumbnail.addEventListener('click', () => {
+                    mainPicture.setAttribute('src', thumbnail.getAttribute('src'))
+                })
+            });
+        }
     </script>
 {% endblock %}

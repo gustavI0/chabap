@@ -1,20 +1,190 @@
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+// Colors variable
+$pale_green: #bdddd2;
+$dark_green: #16311E;
+$brown: #953D49;
+$orange: #DD541F;
+$white: #fff;
 
 body {
-    background-color: #bdddd2;
+    background-color: $pale_green;
+    font-family: 'Open Sans', sans-serif;
 }
 
 a {
-    color: #953D49;
+    color: $orange;
 }
 
 a:hover {
-    color: #DD541F;
-    // color: #16311E;
+    color: $white;
+    text-decoration: none;
 }
 
-.card-img-top {
-    width: 10rem;
-    height: auto;
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
+
+header {
+    .header-title {
+        padding: 2rem 0;
+    }
+
+    h1 {
+        a {
+            color: $white;
+            &:hover {
+                color: $brown;
+                transition: 0.2s;
+            }
+        }
+    }
+
+    .nav-link {
+        color: $brown;
+    }
+}
+
+
+main {
+    margin: 2rem 0;
+
+    h1, h2, h3 {
+        color: $white;
+    }
+
+    // BUTTONS
+    .btn {
+        margin: 5px;
+        border-radius: 0;
+        color: $white;
+        &:hover {
+            box-shadow: 5px 5px $white;
+            cursor: pointer;
+            color: $white;
+        }
+    }
+
+    .btn-primary {
+        border-color: $orange;
+        background-color: $orange;
+        &:hover {
+            border-color: $dark_green;
+            background-color: $dark_green;
+        }
+    }
+
+    .btn-light {
+        color: $pale_green;
+        border-color: $white;
+        background-color: $white;
+        &:hover {
+            box-shadow: 5px 5px $white;
+            border-color: $brown;
+            background-color: $brown;
+        }
+    }
+
+    // FORMS
+    .form-control {
+        border-radius: 0;
+        &:focus {
+            border-color: $dark_green;
+            border-width: 2px;
+            box-shadow: none;
+        }
+    }
+
+    .page-title {
+        margin: 2rem 0;
+    }
+
+    // HOMEPAGE
+    .description-item {
+        margin: 2rem 0;
+    }
+
+    // LIST PAGE
+    .card {
+        border-radius: 0;
+        &:hover {
+            box-shadow: 5px 5px $dark_green;
+            transition: 0.2s;
+        }
+
+        .select-button {
+            text-align: center;
+        }
+    }
+
+    // PRODUCT PAGE
+    .poster {
+        height: 500px;
+
+        img {
+            width: 550px;
+            height: 550px;
+            object-fit: cover;
+        }
+    }
+
+    .thumbnails {
+        margin: 2rem 0;
+    }
+
+    .product_thumbnail {
+        margin: 2rem 0;
+        &:hover {
+            cursor: pointer;
+            box-shadow: 5px 5px $dark_green;
+        }
+
+    }
+
+    .contrib-form {
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+    }
+
+    #form_email, #form_amount, #form_pay {
+        margin: 0 2rem;
+    }
+
+    .back-to-list {
+        margin: 2rem auto;
+    }
+
+    // PAYMENT PAGE
+    .stripe-form {
+        display: flex;
+        justify-content: center;
+
+        #payment-form {
+            border-radius: 0;
+            background-color: $white;
+
+            #card-button, #card-element {
+                margin: 0;
+                border-radius: 0;
+            }
+
+            #card-button {
+                background-color: $orange;
+            }
+
+            #card-element {
+                background-color: $pale_green;
+            }
+        }
+    }
+}
+
+
+
+
+

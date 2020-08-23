@@ -5,12 +5,12 @@
         data-widget-counter="{{ value|length }}"
     >
         {% for key,productImageForm in form.children %}
-            {{ form_widget(productImageForm) }}
+            {{ form_widget(productImageForm, { 'attr': {'class': 'form-group-file'} }) }}
 
         {% endfor %}
     </ul>
 
     <button type="button"
-            class="add-another-collection-widget"
+            class="btn btn-primary add-another-collection-widget"
             data-list-selector="#product-images-fields-list">Add another Product Image</button>
 {% endblock %}

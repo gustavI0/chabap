@@ -1,5 +1,4 @@
 window.onload = () => {
-
     // On instancie Stripe et on lui passe notre clé publique
     let stripe = Stripe('pk_test_51HB0wcEUBXiqdgnEmSbUGmb9TDKMwKemhhq94I5aVGZPOScEmAtjuARFoTp6gp6H32lP4ZcjP3waXAXuuitLvOpN00ENpNJ3UP');
 
@@ -79,17 +78,11 @@ window.onload = () => {
     // Shows a success message when the payment is complete
     let orderComplete = function(paymentIntentId) {
         loading(false);
-        // document
-        //     .querySelector(".result-message a")
-        //     .setAttribute(
-        //         "href",
-        //         "https://dashboard.stripe.com/test/payments/" + paymentIntentId
-        //     );
         document.querySelector(".result-message").classList.remove("hidden");
         document.querySelector("button").disabled = true;
-        setTimeout(function() {
-            document.location.href = '/liste';
-        }, 4000);
+        // setTimeout(function() {
+        //     document.location.href = '/liste';
+        // }, 4000);
     };
 
 

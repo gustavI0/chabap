@@ -3,7 +3,9 @@
 {% block title %}Product index{% endblock %}
 
 {% block body %}
-    <h1>Liste de cadeaux</h1>
+    <div class="row page-title">
+        <h1>Liste de cadeaux</h1>
+    </div>
     <div class="row">
         {% for product in products %}
             {% set image = product.images|first %}
@@ -16,10 +18,13 @@
                         <h5 class="card-title">{{ product.name }}</h5>
                         <p class="card-text">{{ product.description }}</p>
                         <p class="card-text">{{ product.price }} €</p>
-                        <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-success">Sélectionner</a>
-                        {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-primary">edit</a>
-                        {% endif %}
+                        <div class="select-button">
+                            <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary">Sélectionner</a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-primary">edit</a>
+                            {% endif %}
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -29,49 +34,7 @@
             </div>
         {% endfor %}
     </div>
-
-{#    <h1>Product index</h1>#}
-
-{#    <table class="table">#}
-{#        <thead>#}
-{#            <tr>#}
-{#                <th>Id</th>#}
-{#                <th>Name</th>#}
-{#                <th>Price</th>#}
-{#                <th>Description</th>#}
-{#                <th>Image.name</th>#}
-{#                <th>Image.originalName</th>#}
-{#                <th>Image.mimeType</th>#}
-{#                <th>Image.size</th>#}
-{#                <th>Image.dimensions</th>#}
-{#                <th>actions</th>#}
-{#            </tr>#}
-{#        </thead>#}
-{#        <tbody>#}
-{#        {% for product in products %}#}
-{#            <tr>#}
-{#                <td>{{ product.id }}</td>#}
-{#                <td>{{ product.name }}</td>#}
-{#                <td>{{ product.price }}</td>#}
-{#                <td>{{ product.description }}</td>#}
-{#                <td>{{ product.image.name }}</td>#}
-{#                <td>{{ product.image.originalName }}</td>#}
-{#                <td>{{ product.image.mimeType }}</td>#}
-{#                <td>{{ product.image.size }}</td>#}
-{#                <td>{{ dump(product.image.dimensions) }}</td>#}
-{#                <td>#}
-{#                    <a href="{{ path('product_show', {'id': product.id}) }}">show</a>#}
-{#                    <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>#}
-{#                </td>#}
-{#            </tr>#}
-{#        {% else %}#}
-{#            <tr>#}
-{#                <td colspan="11">no records found</td>#}
-{#            </tr>#}
-{#        {% endfor %}#}
-{#        </tbody>#}
-{#    </table>#}
     {% if is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('product_new') }}">Create new</a>
+    <a href="{{ path('product_new') }}" class="btn btn-primary">Create new</a>
     {% endif %}
 {% endblock %}

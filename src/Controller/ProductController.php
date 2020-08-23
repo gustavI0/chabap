@@ -114,16 +114,17 @@ class ProductController extends AbstractController
 
         $paymentData = ['left_contribution' => $payment->getLeftToContribute()];
         $form = $this->createFormBuilder($paymentData)
-            ->add('email', TextType::class)
+            ->add('email', TextType::class, [
+                'label' => false,
+                'attr' => ['placeholder' => 'Email'],
+            ])
             ->add('amount', IntegerType::class, [
-                'constraints' => [
-                    new LessThanOrEqual([
-                        'value' => 100,
-                        'message' => 'Vous ne pouvez pas contribuer plus que le prix total, mais vous pouvez donner à la cagnotte pour le voyage !'
-                    ])
-                ]
+                'label' => false,
+                'attr' => ['placeholder' => 'Montant'],
             ])
             ->add('left_contribution', HiddenType::class)
+            ->add('pay', SubmitType::class, [
+                'label' => 'Participer'])
             ->setAction($this->generateUrl('product_contribute', array('id' => $id)))
             ->getForm();
 

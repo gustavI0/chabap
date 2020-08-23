@@ -14,8 +14,14 @@ class PaymentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', TextType::class)
-            ->add('amount', IntegerType::class)
+            ->add('email', TextType::class, [
+                'label' => false,
+                'attr' => ['placeholder' => 'Email'],
+            ])
+            ->add('amount', IntegerType::class, [
+                'label' => false,
+                'attr' => ['placeholder' => 'Montant'],
+            ])
         ;
     }
 

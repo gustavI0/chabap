@@ -3,10 +3,10 @@
 {% block title %}Payment{% endblock %}
 
 {% block body %}
-    <div class="row">
-        <p>Contribution de {{ payment.amount }} €</p>
+    <div class="row page-title">
+        <h1>Contribution de {{ payment.amount }} €</h1>
     </div>
-    <div class="row">
+    <div class="row stripe-form">
         <form id="payment-form" method="post">
             <div id="card-element" class="form-group"><!--Stripe.js injects the Card Element--></div>
             <button id="card-button" data-secret="{{ paymentIntent.clientSecret }}" class="btn btn-primary">
@@ -15,7 +15,7 @@
             </button>
             <p id="card-error" role="alert"></p>
             <p class="result-message hidden">
-                Paiement confirmé ! <a href="{{ path('product_index') }}">Redirection vers la liste des objets</a>
+                Paiement accepté ! Merci pour votre participation. <a href="{{ path('product_index') }}">Retour à la liste des cadeaux</a>
             </p>
         </form>
     </div>
