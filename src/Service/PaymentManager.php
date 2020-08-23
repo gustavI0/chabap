@@ -17,17 +17,36 @@ use Stripe\Webhook;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PaymentManager
 {
-
+    /**
+     * @var EntityManagerInterface
+     */
     protected $entityManager;
+
+    /**
+     * @var ProductRepository
+     */
     protected $productRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, ProductRepository $productRepository)
+    /**
+     * @var string
+     */
+    protected $apiKey;
+
+    /**
+     * @var string
+     */
+    protected $endpointSecret;
+
+    public function __construct(EntityManagerInterface $entityManager, ProductRepository $productRepository, string $apiKey, string $endpointSecret)
     {
         $this->entityManager = $entityManager;
         $this->productRepository = $productRepository;
+        $this->apiKey = $apiKey;
+        $this->endpointSecret = $endpointSecret;
     }
 
 
@@ -39,7 +58,7 @@ class PaymentManager
     {
         // Set your secret key. Remember to switch to your live secret key in production!
         // See your keys here: https://dashboard.stripe.com/account/apikeys
-        Stripe::setApiKey('sk_test_51HB0wcEUBXiqdgnEQySryKnZ0GAtAvJ2lg0fSxezgr2zHkTKUz3GCiCarSpD1ZFqpSTYBo6iMnDY8pzIBeXuNIQC00oHOlPqTc');
+        Stripe::setApiKey($this->apiKey);
 
         try {
             $paymentIntent = PaymentIntent::create([
@@ -55,8 +74,7 @@ class PaymentManager
             ];
             return json_encode($output);
         } catch (ApiErrorException $e) {
-            http_response_code(500);
-            return json_encode(['error' => $e->getMessage()]);
+            throw new HttpException(500, $e->getMessage());
         }
     }
 
@@ -68,9 +86,9 @@ class PaymentManager
     {
         // Set your secret key. Remember to switch to your live secret key in production!
         // See your keys here: https://dashboard.stripe.com/account/apikeys
-        Stripe::setApiKey('sk_test_51HB0wcEUBXiqdgnEQySryKnZ0GAtAvJ2lg0fSxezgr2zHkTKUz3GCiCarSpD1ZFqpSTYBo6iMnDY8pzIBeXuNIQC00oHOlPqTc');
+        Stripe::setApiKey($this->apiKey);
 
-        $endpoint_secret = 'whsec_9dPcJ4cIt2yWOCf04TFz6yi1q5lSA1Ph';
+        $endpoint_secret = $this->endpointSecret;
 
         $event = null;
 
