@@ -1,12 +1,10 @@
 {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <div class="collapse navbar-collapse text-center">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ path('home') }}">Accueil</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('product_index') }}">Liste</a></li>
-                </ul>
-            </div>
+            <ul class="navbar-nav mr-auto justify-content-center">
+                <li class="nav-item"><a class="nav-link" href="{{ path('home') }}">ACCUEIL</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('product_index') }}">LISTE</a></li>
+            </ul>
         </div>
     </nav>
 

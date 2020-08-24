@@ -16,4 +16,3 @@ import $ from 'jquery';
 // the bootstrap module doesn't export/return anything
 require('bootstrap');
 
-console.log('Hello Webpack Encore!');

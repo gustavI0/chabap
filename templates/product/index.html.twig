@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product index{% endblock %}
+{% block title %}Liste{% endblock %}
 
 {% block body %}
     <div class="row page-title">
@@ -12,11 +12,15 @@
             <div class="col-sm-3">
                 <div class="card">
                     {% if image %}
-                    <img class="card-img-top" src="{{ asset('images/products/'~ image.image.name) }}" alt="{{ image.image.name }}">
+                        <a href="{{ path('product_show', {'id': product.id}) }}"><img class="card-img-top" src="{{ asset('images/products/'~ image.image.name) }}" alt="{{ image.image.name }}"></a>
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text">{{ product.price }} €</p>
+                        <h5 class="card-title">{{ product.name|upper }}</h5>
+                        {% if product.category != 'voyage' %}
+                            <p class="card-text">{{ product.price }} €</p>
+                        {% else %}
+                            <p class="card-text">Cagnotte</p>
+                        {% endif %}
                         <div class="select-button">
                             <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary">Sélectionner</a>
                             {% if is_granted('ROLE_ADMIN') %}

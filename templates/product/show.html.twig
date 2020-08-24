@@ -4,11 +4,11 @@
 
 {% block body %}
     <div class="row page-title">
-        <h1>{{ product.name }}</h1>
+        <h1>{{ product.name|upper }}</h1>
     </div>
     <div class="container">
         <div class="row object-description">
-            <div class="col">
+            <div class="col-lg-6">
                 <div class="poster">
                     {% set poster = product.images|first %}
                     <img id="product_poster" class="img-fluid" src="{{ asset('images/products/'~ poster.image.name) }}" alt="{{ poster.image.name }}">
@@ -16,41 +16,52 @@
                 {% if product.images|length > 1 %}
                 <div class="row">
                     {% for thumbnail in product.images %}
-                        <div class="col-sm-3 thumbnails">
+                        <div class="col-sm thumbnails">
                             <img class="product_thumbnail img-fluid" src="{{ asset('images/products/'~ thumbnail.image.name) }}" alt="{{ thumbnail.image.name }}">
                         </div>
                     {% endfor %}
                 </div>
                 {% endif %}
             </div>
-            <div class="col">
-                <div class="row">
-                    <div class="col w-50 description-item">
-                        <h3>DESCRIPTION</h3>
-                        <p>{{ product.description }}</p>
-                    </div>
+            <div class="col-lg-6">
+                <div class="description-item">
+                    <h3>DESCRIPTION</h3>
+                    <p>{{ product.description }}</p>
                 </div>
                 {% if product.source %}
-                    <div class="row">
-                        <div class="col w-50 description-item">
-                            <h3>ORIGINE</h3>
-                            <p>{{ product.source }} </p>
-                        </div>
+                    <div class="description-item">
+                        <h3>ORIGINE</h3>
+                        <p>{{ product.source }} </p>
                     </div>
                 {% endif %}
-                <div class="row">
-                    <div class="col w-50 description-item">
+                {% if product.category != 'voyage' %}
+                    <div class="description-item">
                         <h3>PRIX</h3>
                         <p>{{ product.price }} €</p>
                     </div>
-                </div>
-                {% if percentage > 0 %}
-                <div class="row">
-                    <div class="col w-50 description-item">
+                {% endif %}
+                {% if product.category != 'voyage' %}
+                    <div class="description-item">
                         <h3>PARTICIPATION</h3>
-                        <p>{{ percentage }} %</p>
+
+                            {% if percentage == 0 %}
+                                <p>Soyez le premier à participer !</p>
+                            {% elseif percentage > 0 %}
+                                <p>{{ percentage }} %</p>
+                                {% if percentage <= 25 %}
+                                    <p>Ça commence bien !</p>
+                                {% elseif percentage <= 50 %}
+                                    <p>Pas mal !</p>
+                                {% elseif percentage <= 75 %}
+                                    <p>On se rapproche...!</p>
+                                {% elseif percentage < 100 %}
+                                    <p>Un dernier petit effort !</p>
+                                {% endif %}
+                                <p>Il reste {{ payment.leftToContribute }} € pour atteindre 100%.</p>
+                            {% elseif percentage >= 100 %}
+                                <p>Participation complète, merci !</p>
+                            {% endif %}
                     </div>
-                </div>
                 {% endif %}
             </div>
         </div>
@@ -95,6 +106,10 @@
             <tr>
                 <th>Description</th>
                 <td>{{ product.description }}</td>
+            </tr>
+            <tr>
+                <th>Category</th>
+                <td>{{ product.category }}</td>
             </tr>
             {% for image in product.images %}
                 <tr>
