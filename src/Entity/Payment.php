@@ -36,7 +36,7 @@ class Payment implements PaymentInterface
     protected $email;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="payments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="payments", cascade={"persist", "remove"})
      */
     protected $product;
 

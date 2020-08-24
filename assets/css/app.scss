@@ -79,7 +79,7 @@ main {
     }
 
     .btn-light {
-        color: $pale_green;
+        color: $brown;
         border-color: $white;
         background-color: $white;
         &:hover {
@@ -105,7 +105,7 @@ main {
 
     // HOMEPAGE
     .description-item {
-        margin: 2rem 0;
+        margin: 1rem 0;
     }
 
     // LIST PAGE
@@ -116,12 +116,20 @@ main {
             transition: 0.2s;
         }
 
-        .select-button {
+        .card-img-top {
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        .card-title, .card-text, .select-button {
             text-align: center;
         }
     }
 
     // PRODUCT PAGE
+    .object-description {
+        margin: 0 0 5rem 0;
+    }
     .poster {
         height: 500px;
 
@@ -145,18 +153,12 @@ main {
 
     }
 
-    .contrib-form {
-        display: flex;
-        justify-content: center;
-        align-items: baseline;
-    }
-
     #form_email, #form_amount, #form_pay {
         margin: 0 2rem;
     }
 
-    .back-to-list {
-        margin: 2rem auto;
+    .admin-button {
+        margin: 3rem auto;
     }
 
     // PAYMENT PAGE

@@ -120,7 +120,7 @@ class ProductController extends AbstractController
             ])
             ->add('amount', IntegerType::class, [
                 'label' => false,
-                'attr' => ['placeholder' => 'Montant'],
+                'attr' => ['placeholder' => 'Montant en €'],
             ])
             ->add('left_contribution', HiddenType::class)
             ->add('pay', SubmitType::class, [

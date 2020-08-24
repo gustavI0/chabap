@@ -48,7 +48,7 @@ class Image implements ImageInterface
     protected $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="images", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="images", cascade={"persist", "remove"})
      */
     private $product;
 

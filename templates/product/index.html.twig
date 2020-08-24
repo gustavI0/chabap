@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="row page-title">
-        <h1>Liste de cadeaux</h1>
+        <h1>LISTE</h1>
     </div>
     <div class="row">
         {% for product in products %}
@@ -16,7 +16,6 @@
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text">{{ product.description }}</p>
                         <p class="card-text">{{ product.price }} €</p>
                         <div class="select-button">
                             <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary">Sélectionner</a>
@@ -35,6 +34,8 @@
         {% endfor %}
     </div>
     {% if is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('product_new') }}" class="btn btn-primary">Create new</a>
+        <div class="row admin-button">
+            <a href="{{ path('product_new') }}" class="btn btn-primary">Create new</a>
+        </div>
     {% endif %}
 {% endblock %}

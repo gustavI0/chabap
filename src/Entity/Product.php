@@ -44,14 +44,24 @@ class Product implements ProductInterface
     protected $currentContribution;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Payment", mappedBy="product", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Payment", mappedBy="product", cascade={"persist", "remove"})
      */
     protected $payments;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="product", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Image", mappedBy="product", cascade={"persist", "remove"})
      */
     protected $images;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $source;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $category;
 
 
     public function __construct()
@@ -172,6 +182,30 @@ class Product implements ProductInterface
                 $image->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSource(): ?string
+    {
+        return $this->source;
+    }
+
+    public function setSource(?string $source): self
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(string $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
