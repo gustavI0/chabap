@@ -1,6 +1,6 @@
 window.onload = () => {
     // On instancie Stripe et on lui passe notre clé publique
-    let stripe = Stripe('pk_test_51HB0wcEUBXiqdgnEmSbUGmb9TDKMwKemhhq94I5aVGZPOScEmAtjuARFoTp6gp6H32lP4ZcjP3waXAXuuitLvOpN00ENpNJ3UP');
+    let stripe = Stripe('pk_live_51HB0wcEUBXiqdgnEmGo7QgMJJiRrcLMxVKzxR6cxBQO7ZJgoVzFiZRY76YNPGAKNfOSP9IHKKeqR0KJriwLhIH9O00R2s70Pxr');
 
     // Initialise les éléments du formulaire
     let elements = stripe.elements();

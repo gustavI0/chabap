@@ -60,11 +60,21 @@ class PaymentController extends AbstractController
 
     /**
      * @Route("/{id}", name="payment_show", methods={"GET"})
-     * @param PaymentInterface $payment
+     * @param int $id
      * @return Response
      */
-    public function show(PaymentInterface $payment): Response
+    public function show(int $id): Response
     {
+        $payment = $this->getDoctrine()
+            ->getRepository(Payment::class)
+            ->find($id);
+
+        if (!$payment) {
+            throw $this->createNotFoundException(
+                'No payment found for id '. $id
+            );
+        }
+
         return $this->render('payment/show.html.twig', [
             'payment' => $payment,
         ]);
@@ -73,10 +83,10 @@ class PaymentController extends AbstractController
     /**
      * @Route("/{id}/edit", name="payment_edit", methods={"GET","POST"})
      * @param Request $request
-     * @param PaymentInterface $payment
+     * @param Payment $payment
      * @return Response
      */
-    public function edit(Request $request, PaymentInterface $payment): Response
+    public function edit(Request $request, Payment $payment): Response
     {
         $form = $this->createForm(PaymentType::class, $payment);
         $form->handleRequest($request);
@@ -96,10 +106,10 @@ class PaymentController extends AbstractController
     /**
      * @Route("/{id}", name="payment_delete", methods={"DELETE"})
      * @param Request $request
-     * @param PaymentInterface $payment
+     * @param Payment $payment
      * @return Response
      */
-    public function delete(Request $request, PaymentInterface $payment): Response
+    public function delete(Request $request, Payment $payment): Response
     {
         if ($this->isCsrfTokenValid('delete'.$payment->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();

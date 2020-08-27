@@ -139,10 +139,9 @@ class PaymentManager
 
         $currentContrib = $product->getCurrentContribution();
         $product->setCurrentContribution($currentContrib + ($paymentIntent->amount / 100));
+        $this->entityManager->flush();
 
         $this->createPayment($paymentIntent->amount, $paymentIntent->receipt_email, $product);
-
-        $this->entityManager->flush();
 
         return new Response();
     }
@@ -157,7 +156,7 @@ class PaymentManager
     {
         $payment = new Payment();
         $payment->setDate(new \DateTime('now'));
-        $payment->setAmount($amount);
+        $payment->setAmount($amount / 100);
         $payment->setEmail($email);
         $payment->setProduct($product);
         $this->entityManager->persist($payment);

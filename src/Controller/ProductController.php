@@ -28,7 +28,7 @@ class ProductController extends AbstractController
 {
 
     /**
-     * @var PaymentManager
+     * @var ProductManager
      */
     protected $productManager;
 
@@ -39,6 +39,7 @@ class ProductController extends AbstractController
 
     /**
      * ProductController constructor.
+     * @param ProductManager $productManager
      * @param PaymentManager $paymentManager
      */
     public function __construct(ProductManager $productManager, PaymentManager $paymentManager)
@@ -155,10 +156,18 @@ class ProductController extends AbstractController
             );
             return $this->redirectToRoute('product_show', array('id' => $id));
         }
+        if ($contribution['amount'] < 1) {
+            $this->addFlash(
+                'danger',
+                'Le montant de votre contribution doit être supérieur ou égal à 1 !'
+            );
+            return $this->redirectToRoute('product_show', array('id' => $id));
+        }
 
         $contribution['product_id'] = $id;
 
         $paymentIntent =  $this->paymentManager->createPaymentIntentStripe($contribution);
+
         return $this->render('payment/contribute.html.twig', [
             'paymentIntent' => json_decode($paymentIntent),
             'payment' => $contribution
