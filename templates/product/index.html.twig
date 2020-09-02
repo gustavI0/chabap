@@ -17,7 +17,11 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ product.name|upper }}</h5>
                         {% if product.category != 'voyage' %}
-                            <p class="card-text">{{ product.price }} €</p>
+                            {% if product.currentContribution != product.price %}
+                                <p class="card-text">{{ product.price }} €</p>
+                            {% else %}
+                                <p class="card-text">Offert !</p>
+                            {% endif %}
                         {% else %}
                             <p class="card-text">Cagnotte</p>
                         {% endif %}

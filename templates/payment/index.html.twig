@@ -20,7 +20,7 @@
         {% for payment in payments %}
             <tr>
                 <td>{{ payment.id }}</td>
-                <td>{{ payment.product.name }}</td>
+                <td><a href="{{ path('product_show', {'id': payment.product.id}) }}">{{ payment.product.name }}</a></td>
                 <td>{{ payment.amount }} €</td>
                 <td>{{ payment.date ? payment.date|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ payment.email }}</td>

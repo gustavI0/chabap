@@ -40,13 +40,13 @@
                         <p>{{ product.price }} €</p>
                     </div>
                 {% endif %}
-                {% if product.category != 'voyage' %}
+
                     <div class="description-item">
                         <h3>PARTICIPATION</h3>
-
+                        {% if product.category != 'voyage' %}
                             {% if percentage == 0 %}
                                 <p>Soyez le premier à participer !</p>
-                            {% elseif percentage > 0 %}
+                            {% elseif percentage > 0 and percentage < 100 %}
                                 <p>{{ percentage }} %</p>
                                 {% if percentage <= 25 %}
                                     <p>Ça commence bien !</p>
@@ -61,8 +61,11 @@
                             {% elseif percentage >= 100 %}
                                 <p>Participation complète, merci !</p>
                             {% endif %}
+                        {% else %}
+                            <p>{{ product.currentContribution }} €</p>
+                        {% endif %}
                     </div>
-                {% endif %}
+
             </div>
         </div>
         <div class="row description-item justify-content-md-cente">
