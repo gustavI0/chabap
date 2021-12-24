@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}LISTE • UN TROUSSEAU POUR CHABAP{% endblock %}
+
+{% block body %}
+    <div class="row page-title">
+        <h1>LISTE</h1>
+    </div>
+    <div class="row">
+        {% for product in products %}
+            {% set image = product.images|first %}
+            <div class="col-sm-3">
+                <div class="card">
+                    {% if image %}
+                        <a href="{{ path('product_show', {'id': product.id}) }}"><img class="card-img-top" src="{{ asset('images/products/'~ image.image.name) }}" alt="{{ image.image.name }}"></a>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name|upper }}</h5>
+                        {% if product.category != 'voyage' %}
+                            {% if product.currentContribution != product.price %}
+                                <p class="card-text">{{ product.price }} €</p>
+                            {% else %}
+                                <p class="card-text">Offert !</p>
+                            {% endif %}
+                        {% else %}
+                            <p class="card-text">Cagnotte</p>
+                        {% endif %}
+                        <div class="select-button">
+                            <a href="{{ path('product_show', {'id': product.id}) }}" class="btn btn-primary">Sélectionner</a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-primary">edit</a>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="card">
+                <p class="card-text">no records found</p>
+            </div>
+        {% endfor %}
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="row admin-button">
+            <a href="{{ path('product_new') }}" class="btn btn-primary">Create new</a>
+        </div>
+    {% endif %}
+{% endblock %}
